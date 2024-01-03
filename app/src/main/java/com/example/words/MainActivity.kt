@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -263,8 +264,6 @@ Box(
 @Composable
 fun TwoPlayersScreen(text:String){
 
-
-
     val navController = rememberNavController()
     var score1 by remember {
         mutableStateOf(0)
@@ -300,7 +299,7 @@ fun TwoPlayersScreen(text:String){
                 mutableStateOf("")
             }
 
-
+            val wordsList = mutableListOf<String>()
 
             val fontFamily = FontFamily(
                 Font(R.font.pixelifysans_regular, FontWeight.Normal),
@@ -318,7 +317,7 @@ fun TwoPlayersScreen(text:String){
                         .border(3.dp, colorBorder1),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "1P",
+                            text = "1P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -326,7 +325,7 @@ fun TwoPlayersScreen(text:String){
                         )
                     }
                     Text(
-                        text = "$score1",
+                        text = "$score1".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -342,7 +341,7 @@ fun TwoPlayersScreen(text:String){
                         .border(3.dp, colorBorder2),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "2P",
+                            text = "2P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -351,7 +350,7 @@ fun TwoPlayersScreen(text:String){
                     }
 
                     Text(
-                        text = "$score2",
+                        text = "$score2".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -369,8 +368,8 @@ fun TwoPlayersScreen(text:String){
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = text,
-                    fontSize = 42.sp,
+                    text = text.lowercase(),
+                    fontSize = 44.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
                     textAlign = TextAlign.Center,
@@ -397,13 +396,37 @@ fun TwoPlayersScreen(text:String){
                         cursorColor = Color.Black
                         ),
                     textStyle = TextStyle.Default.copy(fontSize = 24.sp,
-                        fontFamily = fontFamily)
+                        fontFamily = fontFamily),
+                    keyboardActions = KeyboardActions(onDone = {
+
+
+                            if (confirmCount % 2 == 0 && editText != "") {
+                                score1 += countUseCase.processWord(
+                                    text,
+                                    editText,
+                                    wordsList = wordsList
+                                )
+                                wordsList.add(editText)
+                                editText = ""
+                            } else {
+                                score2 += countUseCase.processWord(
+                                    text,
+                                    editText,
+                                    wordsList = wordsList
+                                )
+                                wordsList.add(editText)
+                                editText = ""
+                            }
+                            confirmCount++
+                            skipCount = 0
+                        }
+                    )
 
                 )
 
 
 
-                var wordsList = mutableListOf<String>()
+
 
                 Row(modifier = Modifier
                     .padding(top = 48.dp)
@@ -411,49 +434,7 @@ fun TwoPlayersScreen(text:String){
                     horizontalArrangement = Arrangement.SpaceAround) {
 
                     Box(modifier = Modifier
-                        .height(64.dp)
-                        .width(150.dp)
-                        .border(3.dp, Color.Black)
-                        .clickable {
-                            if (editText == "") {
-
-                            } else {
-                                if (confirmCount % 2 == 0) {
-                                    score1 += countUseCase.processWord(
-                                        text,
-                                        editText,
-                                        wordsList = wordsList
-                                    )
-                                    wordsList.add(editText)
-                                    editText = ""
-                                } else {
-                                    score2 += countUseCase.processWord(
-                                        text,
-                                        editText,
-                                        wordsList = wordsList
-                                    )
-                                    wordsList.add(editText)
-                                    editText = ""
-                                }
-                                confirmCount++
-                                skipCount = 0
-                            }
-                        },
-                        contentAlignment = Alignment.Center){
-                        Text(
-                            text = "Подтвердить слово",
-                            fontSize = 20.sp,
-                            fontFamily = fontFamily,
-                            fontWeight = FontWeight.Thin,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-
-
-
-                    Box(modifier = Modifier
-                        .height(64.dp)
+                        .height(78.dp)
                         .width(150.dp)
                         .border(3.dp, Color.Black)
                         .clickable {
@@ -467,7 +448,7 @@ fun TwoPlayersScreen(text:String){
                         contentAlignment = Alignment.Center){
                         Text(
                             text = "Пропустить ход",
-                            fontSize = 20.sp,
+                            fontSize = 22.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
                             textAlign = TextAlign.Center
@@ -537,7 +518,7 @@ fun ThreePlayersScreen(text:String){
         }
     }
 
-
+            val wordsList = mutableListOf<String>()
 
 
     var editText by remember {
@@ -562,7 +543,7 @@ fun ThreePlayersScreen(text:String){
                 .border(3.dp, colorBorder1),
                 contentAlignment = Alignment.Center){
                 Text(
-                    text = "1P",
+                    text = "1P".lowercase(),
                     fontSize = 36.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
@@ -570,7 +551,7 @@ fun ThreePlayersScreen(text:String){
                 )
             }
             Text(
-                text = "$score1",
+                text = "$score1".lowercase(),
                 fontSize = 36.sp,
                 fontFamily = fontFamily,
                 fontWeight = FontWeight.Thin,
@@ -586,7 +567,7 @@ fun ThreePlayersScreen(text:String){
                 .border(3.dp, colorBorder2),
                 contentAlignment = Alignment.Center){
                 Text(
-                    text = "2P",
+                    text = "2P".lowercase(),
                     fontSize = 36.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
@@ -595,7 +576,7 @@ fun ThreePlayersScreen(text:String){
             }
 
             Text(
-                text = "$score2",
+                text = "$score2".lowercase(),
                 fontSize = 36.sp,
                 fontFamily = fontFamily,
                 fontWeight = FontWeight.Thin,
@@ -635,72 +616,58 @@ fun ThreePlayersScreen(text:String){
                 cursorColor = Color.Black
                 ),
             textStyle = TextStyle.Default.copy(fontSize = 24.sp,
-                fontFamily = fontFamily)
+                fontFamily = fontFamily),
 
-        )
+            keyboardActions = KeyboardActions(onDone = {
 
 
-
-        var wordsList = mutableListOf<String>()
-
-        Row(modifier = Modifier
-            .padding(top = 48.dp)
-            .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround) {
-
-            Box(modifier = Modifier
-                .height(64.dp)
-                .width(150.dp)
-                .border(3.dp, Color.Black)
-                .clickable {
-                    if (editText == "") {
-
+                    if (confirmCount % 3 == 0 && editText != "") {
+                        score1 += countUseCase.processWord(
+                            text,
+                            editText,
+                            wordsList = wordsList
+                        )
+                        wordsList.add(editText)
+                        editText = ""
                     } else {
-                        if (confirmCount % 3 == 0) {
-                            score1 += countUseCase.processWord(
+                        if (confirmCount % 3 == 1) {
+                            score2 += countUseCase.processWord(
                                 text,
                                 editText,
                                 wordsList = wordsList
                             )
                             wordsList.add(editText)
                             editText = ""
-                        } else {
-                            if (confirmCount % 3 == 1) {
-                                score2 += countUseCase.processWord(
+                        } else
+                            if (confirmCount % 3 == 2) {
+                                score3 += countUseCase.processWord(
                                     text,
                                     editText,
                                     wordsList = wordsList
                                 )
                                 wordsList.add(editText)
                                 editText = ""
-                            } else
-                                if (confirmCount % 3 == 2) {
-                                    score3 += countUseCase.processWord(
-                                        text,
-                                        editText,
-                                        wordsList = wordsList
-                                    )
-                                    wordsList.add(editText)
-                                    editText = ""
-                                }
+                            }
 
-                        }
-                        confirmCount++
-                        skipCount = 0
                     }
-                },
-                contentAlignment = Alignment.Center){
-                Text(
-                    text = "Подтвердить слово",
-                    fontSize = 20.sp,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Thin,
-                    textAlign = TextAlign.Center
-                )
-            }
+                    confirmCount++
+                    skipCount = 0
+                })
+
+        )
+
+
+
+
+
+        Row(modifier = Modifier
+            .padding(top = 48.dp)
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround) {
+
 
                     Box(modifier = Modifier
-                        .height(64.dp)
+                        .height(78.dp)
                         .width(150.dp)
                         .border(3.dp, Color.Black)
                         .clickable {
@@ -714,7 +681,7 @@ fun ThreePlayersScreen(text:String){
                         contentAlignment = Alignment.Center){
                         Text(
                             text = "Пропустить ход",
-                            fontSize = 20.sp,
+                            fontSize = 22.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
                             textAlign = TextAlign.Center
@@ -732,7 +699,7 @@ fun ThreePlayersScreen(text:String){
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = text,
+                    text = text.lowercase(),
                     fontSize = 42.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
@@ -748,7 +715,7 @@ fun ThreePlayersScreen(text:String){
 
                 Column (horizontalAlignment = Alignment.CenterHorizontally){
                     Text(
-                        text = "$score3",
+                        text = "$score3".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -759,7 +726,7 @@ fun ThreePlayersScreen(text:String){
                         .border(3.dp, colorBorder3),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "3P",
+                            text = "3P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -848,7 +815,7 @@ fun FourPlayersScreen(text:String){
                 mutableStateOf("")
             }
 
-
+            val wordsList = mutableListOf<String>()
 
             val fontFamily = FontFamily(
                 Font(R.font.pixelifysans_regular, FontWeight.Normal),
@@ -866,7 +833,7 @@ fun FourPlayersScreen(text:String){
                         .border(3.dp, colorBorder1),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "1P",
+                            text = "1P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -874,7 +841,7 @@ fun FourPlayersScreen(text:String){
                         )
                     }
                     Text(
-                        text = "$score1",
+                        text = "$score1".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -890,7 +857,7 @@ fun FourPlayersScreen(text:String){
                         .border(3.dp, colorBorder2),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "2P",
+                            text = "2P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -899,7 +866,7 @@ fun FourPlayersScreen(text:String){
                     }
 
                     Text(
-                        text = "$score2",
+                        text = "$score2".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -939,38 +906,32 @@ fun FourPlayersScreen(text:String){
                         cursorColor = Color.Black
                         ),
                     textStyle = TextStyle.Default.copy(fontSize = 24.sp,
-                        fontFamily = fontFamily)
+                        fontFamily = fontFamily),
 
-                )
+                    keyboardActions = KeyboardActions(onDone = {
 
 
-
-                var wordsList = mutableListOf<String>()
-
-                Row(modifier = Modifier
-                    .padding(top = 48.dp)
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround) {
-
-                    Box(modifier = Modifier
-                        .height(64.dp)
-                        .width(150.dp)
-                        .border(3.dp, Color.Black)
-                        .clickable {
-                            if (editText == "") {
-
+                            if (confirmCount % 4 == 0) {
+                                score1 += countUseCase.processWord(
+                                    text,
+                                    editText,
+                                    wordsList = wordsList
+                                )
+                                wordsList.add(editText)
+                                editText = ""
                             } else {
-                                if (confirmCount % 4 == 0) {
-                                    score1 += countUseCase.processWord(
+                                if(confirmCount % 4 == 1){
+                                    score2 += countUseCase.processWord(
                                         text,
                                         editText,
                                         wordsList = wordsList
                                     )
                                     wordsList.add(editText)
                                     editText = ""
-                                } else {
-                                    if(confirmCount % 4 == 1){
-                                        score2 += countUseCase.processWord(
+                                }
+                                else
+                                    if(confirmCount%4 == 2){
+                                        score3 += countUseCase.processWord(
                                             text,
                                             editText,
                                             wordsList = wordsList
@@ -978,9 +939,9 @@ fun FourPlayersScreen(text:String){
                                         wordsList.add(editText)
                                         editText = ""
                                     }
-                                    else
-                                        if(confirmCount%4 == 2){
-                                            score3 += countUseCase.processWord(
+                                    else {
+                                        if(confirmCount%4 == 3){
+                                            score4 += countUseCase.processWord(
                                                 text,
                                                 editText,
                                                 wordsList = wordsList
@@ -988,35 +949,27 @@ fun FourPlayersScreen(text:String){
                                             wordsList.add(editText)
                                             editText = ""
                                         }
-                                    else {
-                                            if(confirmCount%4 == 3){
-                                                score4 += countUseCase.processWord(
-                                                    text,
-                                                    editText,
-                                                    wordsList = wordsList
-                                                )
-                                                wordsList.add(editText)
-                                                editText = ""
-                                            }
-                                        }
+                                    }
 
-                                }
-                                confirmCount++
-                                skipCount = 0
                             }
-                        },
-                        contentAlignment = Alignment.Center){
-                        Text(
-                            text = "Подтвердить слово",
-                            fontSize = 20.sp,
-                            fontFamily = fontFamily,
-                            fontWeight = FontWeight.Thin,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                            confirmCount++
+                            skipCount = 0
+                        })
+
+                )
+
+
+
+
+
+                Row(modifier = Modifier
+                    .padding(top = 48.dp)
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround) {
+
 
                     Box(modifier = Modifier
-                        .height(64.dp)
+                        .height(78.dp)
                         .width(150.dp)
                         .border(3.dp, Color.Black)
                         .clickable {
@@ -1030,7 +983,7 @@ fun FourPlayersScreen(text:String){
                         contentAlignment = Alignment.Center){
                         Text(
                             text = "Пропустить ход",
-                            fontSize = 20.sp,
+                            fontSize = 22.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
                             textAlign = TextAlign.Center
@@ -1048,7 +1001,7 @@ fun FourPlayersScreen(text:String){
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = text,
+                    text = text.lowercase(),
                     fontSize = 42.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
@@ -1064,7 +1017,7 @@ fun FourPlayersScreen(text:String){
 
                 Column (horizontalAlignment = Alignment.CenterHorizontally){
                     Text(
-                        text = "$score3",
+                        text = "$score3".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1075,7 +1028,7 @@ fun FourPlayersScreen(text:String){
                         .border(3.dp, colorBorder3),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "3P",
+                            text = "3P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -1086,7 +1039,7 @@ fun FourPlayersScreen(text:String){
 
                 Column (horizontalAlignment = Alignment.CenterHorizontally){
                     Text(
-                        text = "$score4",
+                        text = "$score4".lowercase(),
                         fontSize = 36.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1097,7 +1050,7 @@ fun FourPlayersScreen(text:String){
                         .border(3.dp, colorBorder4),
                         contentAlignment = Alignment.Center){
                         Text(
-                            text = "4P",
+                            text = "4P".lowercase(),
                             fontSize = 36.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -1129,7 +1082,7 @@ fun Winner2(score1:Int, score2:Int) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Победил первый игрок",
+                        text = "Победил первый игрок".lowercase(),
                         fontSize = 56.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1144,7 +1097,7 @@ fun Winner2(score1:Int, score2:Int) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Победил второй игрок",
+                        text = "Победил второй игрок".lowercase(),
                         fontSize = 56.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1159,7 +1112,7 @@ fun Winner2(score1:Int, score2:Int) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Ничья",
+                        text = "Ничья".lowercase(),
                         fontSize = 56.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1185,7 +1138,7 @@ fun Winner3(score1:Int, score2:Int, score3:Int) {
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = "Победил первый игрок",
+                text = "Победил первый игрок".lowercase(),
                 fontSize = 56.sp,
                 fontFamily = fontFamily,
                 fontWeight = FontWeight.Thin,
@@ -1201,7 +1154,7 @@ fun Winner3(score1:Int, score2:Int, score3:Int) {
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "Победил второй игрок",
+                    text = "Победил второй игрок".lowercase(),
                     fontSize = 56.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
@@ -1217,7 +1170,7 @@ fun Winner3(score1:Int, score2:Int, score3:Int) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Победил третий игрок",
+                        text = "Победил третий игрок".lowercase(),
                         fontSize = 56.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1232,7 +1185,7 @@ fun Winner3(score1:Int, score2:Int, score3:Int) {
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = "Нет победителя",
+                            text = "Нет победителя".lowercase(),
                             fontSize = 56.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -1258,7 +1211,7 @@ fun Winner4(score1:Int, score2:Int, score3:Int, score4:Int) {
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = "Победил первый игрок",
+                text = "Победил первый игрок".lowercase(),
                 fontSize = 56.sp,
                 fontFamily = fontFamily,
                 fontWeight = FontWeight.Thin,
@@ -1274,7 +1227,7 @@ fun Winner4(score1:Int, score2:Int, score3:Int, score4:Int) {
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "Победил второй игрок",
+                    text = "Победил второй игрок".lowercase(),
                     fontSize = 56.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Thin,
@@ -1290,7 +1243,7 @@ fun Winner4(score1:Int, score2:Int, score3:Int, score4:Int) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Победил третий игрок",
+                        text = "Победил третий игрок".lowercase(),
                         fontSize = 56.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Thin,
@@ -1305,7 +1258,7 @@ fun Winner4(score1:Int, score2:Int, score3:Int, score4:Int) {
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = "Победил четвёртый игрок",
+                            text = "Победил четвёртый игрок".lowercase(),
                             fontSize = 56.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
@@ -1320,7 +1273,7 @@ fun Winner4(score1:Int, score2:Int, score3:Int, score4:Int) {
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = "Нет победителя",
+                            text = "Нет победителя".lowercase(),
                             fontSize = 56.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Thin,
